@@ -1,0 +1,1002 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>نظام حياتي</title>
+<link rel="manifest" href="./manifest.json">
+<meta name="theme-color" content="#0a0a14">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="حياتي">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<link rel="icon" href="./icon-192.png">
+<script>
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{ navigator.serviceWorker.register('./sw.js').catch(()=>{}); });
+}
+</script>
+<style>
+:root{
+  --bg:#0a0a14; --bg2:#12121f; --card:#161626; --text:#eee7f5; --muted:#9088a8;
+  --spiritual:#a78bfa; --intellectual:#38bdf8; --body:#4ade80; --social:#fb923c; --finance:#fbbf24; --career:#f472b6;
+  --gold:#e8c766; --glow: rgba(232,199,102,.45);
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box;}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,'Segoe UI',Tahoma,Arial,sans-serif;overflow-x:hidden;}
+body{background:radial-gradient(ellipse at 50% 20%, #1a1530 0%, var(--bg) 65%);min-height:100%;}
+.stars{position:fixed;inset:0;background-image:radial-gradient(1px 1px at 20% 30%,#fff8,transparent),radial-gradient(1px 1px at 70% 60%,#fff6,transparent),radial-gradient(1px 1px at 40% 80%,#fff5,transparent),radial-gradient(1.5px 1.5px at 85% 20%,#fff7,transparent);opacity:.5;pointer-events:none;z-index:0;}
+header{text-align:center;padding:22px 16px 6px;position:relative;z-index:1;}
+header h1{margin:0;font-size:1.3rem;letter-spacing:1px;font-weight:600;background:linear-gradient(90deg,var(--gold),#fff,var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent;}
+.wrap{max-width:520px;margin:0 auto;padding:10px 16px 40px;position:relative;z-index:1;}
+.hexgrid{position:relative;width:100%;aspect-ratio:1/1;max-width:420px;margin:20px auto 8px;}
+.hexgrid svg.links{position:absolute;inset:0;width:100%;height:100%;overflow:visible;z-index:0;}
+.hexgrid svg.links path{fill:none;stroke:url(#linkGrad);stroke-width:1.4;opacity:.55;stroke-dasharray:6 5;animation:dashmove 6s linear infinite;}
+.hexgrid svg.links path.spoke{stroke-dasharray:2 6;opacity:.4;animation:dashmove 4s linear infinite;}
+.hexgrid svg.links path.hex{stroke-width:1.8;opacity:.7;stroke-dasharray:8 4;animation:dashmove 10s linear infinite;}
+@keyframes dashmove{to{stroke-dashoffset:-100;}}
+@keyframes floaty{0%,100%{transform:translateY(0);}50%{transform:translateY(-5px);}}
+@keyframes pulseGlow{0%,100%{box-shadow:inset -8px -10px 18px -6px #00000090,inset 4px 5px 10px -3px #ffffff30,0 10px 18px -6px #000000aa,0 0 18px -4px var(--c);}50%{box-shadow:inset -8px -10px 18px -6px #00000090,inset 4px 5px 10px -3px #ffffff30,0 10px 18px -6px #000000aa,0 0 32px 3px var(--c);}}
+@keyframes centerPulse{0%,100%{box-shadow:inset -10px -12px 20px -6px #00000095,inset 5px 6px 12px -4px #ffffff25,0 0 30px var(--glow);}50%{box-shadow:inset -10px -12px 20px -6px #00000095,inset 5px 6px 12px -4px #ffffff25,0 0 46px 6px var(--glow);}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(14px) scale(.97);}to{opacity:1;transform:translateY(0) scale(1);}}
+.hexpoint{position:absolute;width:104px;height:104px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;border:1px solid color-mix(in srgb, var(--c) 55%, transparent);background:radial-gradient(circle at 32% 26%, #ffffff35, transparent 32%),radial-gradient(circle at 30% 25%, color-mix(in srgb, var(--c) 45%, var(--bg2)) 0%, var(--bg2) 70%);box-shadow:inset -8px -10px 18px -6px #00000090,inset 4px 5px 10px -3px #ffffff30,0 10px 18px -6px #000000aa;filter:grayscale(1) brightness(.35);opacity:.25;transition:left .85s cubic-bezier(.2,.8,.2,1), top .85s cubic-bezier(.2,.8,.2,1), filter .9s ease .1s, opacity .9s ease, transform .2s;z-index:1;}
+.hexpoint.live{filter:none;opacity:1;box-shadow:inset -8px -10px 18px -6px #00000090,inset 4px 5px 10px -3px #ffffff30,0 10px 18px -6px #000000aa,0 0 18px -4px var(--c);}
+.hexpoint.animate{animation:floaty 5s ease-in-out infinite, pulseGlow 3.5s ease-in-out infinite;}
+.hexpoint:active{transform:scale(.9);}
+.hexpoint .ic{width:30px;height:30px;stroke:var(--c);}
+.hexpoint .lb{font-size:.72rem;margin-top:2px;color:var(--text);opacity:.9;}
+.hexpoint .bar{width:60px;height:4px;border-radius:3px;background:#ffffff22;margin-top:6px;overflow:hidden;}
+.hexpoint .bar i{display:block;height:100%;background:var(--c);width:0%;transition:width .5s;}
+.alertDot{position:absolute;top:6px;left:6px;width:11px;height:11px;border-radius:50%;background:#f87171;box-shadow:0 0 8px #f87171;animation:alertPulse 1.6s ease-in-out infinite;}
+@keyframes alertPulse{0%,100%{transform:scale(1);opacity:1;}50%{transform:scale(1.3);opacity:.6;}}
+.center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:132px;height:132px;border-radius:50%;background:radial-gradient(circle at 32% 26%, #ffffff40, transparent 30%),radial-gradient(circle at 40% 30%, #352a5c, #100c1e 75%);border:1px solid color-mix(in srgb, var(--gold) 60%, transparent);box-shadow:inset -10px -12px 20px -6px #00000095,inset 5px 6px 12px -4px #ffffff25;animation:centerPulse 3.5s ease-in-out infinite, fadeUp .5s backwards;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;text-align:center;padding:8px;z-index:2;}
+.center:active{transform:translate(-50%,-50%) scale(.94);}
+.center .pt{font-size:.68rem;color:var(--gold);letter-spacing:2px;text-transform:uppercase;}
+.center .pv{font-size:.72rem;margin-top:4px;color:var(--muted);max-width:110px;line-height:1.3;}
+.orbitRing{position:absolute;top:50%;left:50%;width:1px;height:1px;z-index:3;pointer-events:none;}
+.orbitDot{position:absolute;top:0;left:0;width:16px;height:16px;margin:-8px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,var(--gold));box-shadow:0 0 10px 2px var(--glow);animation:orbit 16s linear infinite;pointer-events:auto;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:8px;color:#3a2c00;font-weight:700;}
+@keyframes orbit{from{transform:rotate(0deg) translateX(100px) rotate(0deg);}to{transform:rotate(360deg) translateX(100px) rotate(-360deg);}}
+.orbitEmpty{position:absolute;top:0;left:0;width:100px;height:100px;margin:-50px;border:1px dashed #ffffff20;border-radius:50%;animation:spin 30s linear infinite;pointer-events:none;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.moonOrbit{position:absolute;top:50%;left:50%;width:34px;height:34px;margin:-17px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#e8e8f0,#9797ab 60%,#5a5a6e);box-shadow:0 0 14px 2px #ffffff55;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer;z-index:4;animation:moonOrbit 22s linear infinite;}
+@keyframes moonOrbit{from{transform:rotate(0deg) translateX(85px) rotate(0deg);}to{transform:rotate(-360deg) translateX(85px) rotate(360deg);}}
+.landingFlash{position:fixed;width:80px;height:80px;margin:-40px 0 0 -40px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#fff,var(--c) 45%,color-mix(in srgb,var(--c) 60%,#000) 100%);box-shadow:0 0 0 5px color-mix(in srgb,var(--c) 35%,transparent),0 0 50px var(--c);z-index:15;pointer-events:none;opacity:0;display:flex;align-items:center;justify-content:center;transform:scale(1) rotate(0deg);}
+.landingFlash.go{animation:landingZoom 1.4s cubic-bezier(.3,.1,.2,1) forwards;}
+@keyframes landingZoom{
+  0%{opacity:1;transform:scale(1) rotate(0deg);}
+  4%{transform:scale(1.01) rotate(20deg);}
+  8%{transform:scale(1.03) rotate(40deg);}
+  12%{transform:scale(1.05) rotate(60deg);}
+  16%{transform:scale(1.07) rotate(80deg);}
+  20%{transform:scale(1.09) rotate(100deg);}
+  24%{transform:scale(1.11) rotate(122deg);}
+  28%{transform:scale(1.13) rotate(145deg);}
+  32%{transform:scale(1.16) rotate(168deg);}
+  36%{transform:scale(1.19) rotate(192deg);}
+  40%{transform:scale(1.22) rotate(216deg);}
+  44%{transform:scale(1.25) rotate(242deg);}
+  48%{transform:scale(1.29) rotate(268deg);}
+  52%{transform:scale(1.33) rotate(296deg);}
+  56%{transform:scale(1.4) rotate(326deg);}
+  60%{transform:scale(1.55) rotate(358deg);}
+  66%{transform:scale(2.4) rotate(400deg);}
+  73%{transform:scale(5) rotate(440deg);}
+  80%{opacity:1;transform:scale(13) rotate(480deg);}
+  100%{opacity:0;transform:scale(26) rotate(520deg);}
+}
+.sheet{max-width:480px;margin:0 auto;padding:20px 18px calc(40px + env(safe-area-inset-bottom,0px));min-height:100%;animation:sheetIn .3s ease-out backwards;}
+@keyframes sheetIn{0%{opacity:0;transform:translateY(10px) scale(.9);filter:blur(6px);}100%{opacity:1;transform:translateY(0) scale(1);filter:blur(0);}}
+.quote{max-width:420px;margin:6px auto 18px;text-align:center;font-size:.8rem;color:var(--muted);font-style:italic;padding:0 20px;min-height:2.2em;}
+.quote b{color:var(--gold);font-style:normal;}
+.aibtn{display:block;width:100%;max-width:420px;margin:0 auto 14px;padding:13px;border-radius:14px;border:1px solid #ffffff22;background:linear-gradient(135deg,#2a1f45,#1a1430);color:var(--text);font-size:.9rem;cursor:pointer;text-align:center;}
+.aibtn:active{opacity:.8;}
+
+/* overlay */
+.ov{position:fixed;inset:0;background:#05050ae0;backdrop-filter:blur(6px);z-index:10;display:none;overflow-y:auto;}
+.ov.show{display:block;}
+.inlineForm{display:flex;flex-direction:column;gap:8px;background:var(--bg2);border:1px solid #ffffff22;border-radius:12px;padding:10px;margin-top:8px;}
+.inlineForm .fbtns{display:flex;gap:8px;}
+.inlineForm button{flex:1;border:none;border-radius:8px;padding:8px;font-size:.8rem;cursor:pointer;}
+.inlineForm .ok{background:var(--gold);color:#1a1430;font-weight:600;}
+.inlineForm .cancel{background:#ffffff18;color:var(--text);}
+.tagchip{display:inline-block;padding:4px 9px;border-radius:20px;font-size:.72rem;margin:2px;cursor:pointer;border:1px solid #ffffff33;color:var(--text);}
+.tagchip.on{border-color:transparent;color:#111;}
+.dayRow{display:flex;align-items:center;gap:8px;background:var(--bg2);border-radius:10px;padding:8px 10px;margin-bottom:6px;}
+.dayRow .dname{width:56px;font-size:.75rem;color:var(--muted);flex-shrink:0;}
+.dayRow input[type=text]{flex:1;background:none;border:none;font-size:.82rem;padding:2px;}
+.dayRow input[type=checkbox]{width:19px;height:19px;flex-shrink:0;}
+.miniStat{display:flex;gap:8px;margin-top:8px;}
+.miniStat .box{flex:1;background:var(--bg2);border-radius:10px;padding:10px;text-align:center;}
+.miniStat .box b{display:block;font-size:1.15rem;color:var(--c);}
+.miniStat .box span{font-size:.68rem;color:var(--muted);}
+.prayerGrid{display:flex;gap:6px;flex-wrap:wrap;}
+.prayerChip{flex:1;min-width:60px;text-align:center;padding:10px 4px;border-radius:12px;background:var(--bg2);border:1.5px solid #ffffff22;cursor:pointer;font-size:.75rem;transition:.2s;}
+.prayerChip.done{background:color-mix(in srgb,var(--c) 30%, var(--bg2));border-color:var(--c);color:var(--c);}
+.istigBtn{width:100%;padding:16px;border-radius:14px;background:radial-gradient(circle,color-mix(in srgb,var(--c) 25%,var(--bg2)),var(--bg2));border:1.5px solid var(--c);color:var(--text);font-size:1rem;cursor:pointer;margin-top:8px;}
+.istigBtn b{display:block;font-size:1.6rem;color:var(--c);}
+.circleRow{margin-top:10px;}
+.circleRow h4{margin:0 0 6px;font-size:.78rem;color:var(--c);}
+.pRow{display:flex;align-items:center;gap:8px;background:var(--bg2);border-radius:10px;padding:8px 10px;margin-bottom:6px;}
+.pRow .pname{flex:1;font-size:.83rem;}
+.pRow .plast{font-size:.68rem;color:var(--muted);}
+.pRow button{background:var(--c);border:none;color:#111;font-size:.68rem;padding:5px 9px;border-radius:8px;cursor:pointer;}
+.ledgerRow{display:flex;align-items:center;gap:8px;background:var(--bg2);border-radius:10px;padding:8px 10px;margin-bottom:6px;font-size:.8rem;}
+.ledgerRow .amt.in{color:#4ade80;} .ledgerRow .amt.out{color:#f87171;} .ledgerRow .amt.invest{color:#fbbf24;}
+.subjRow{background:var(--bg2);border-radius:10px;padding:10px;margin-bottom:8px;}
+.subjRow .stop{display:flex;justify-content:space-between;align-items:center;}
+.subjRow input[type=text]{background:none;border:none;font-weight:600;font-size:.88rem;flex:1;}
+.modeSel{display:flex;gap:8px;margin-bottom:10px;}
+.modeSel button{flex:1;padding:9px;border-radius:10px;border:1.5px solid #ffffff22;background:var(--bg2);color:var(--text);cursor:pointer;font-size:.8rem;}
+.modeSel button.on{border-color:var(--c);background:color-mix(in srgb,var(--c) 25%,var(--bg2));color:var(--c);}
+.sheet-top{display:flex;align-items:center;justify-content:space-between;padding-top:env(safe-area-inset-top,0px);}
+.close{background:none;border:1px solid #ffffff33;color:var(--text);width:34px;height:34px;border-radius:50%;font-size:1rem;cursor:pointer;}
+.sheet h2{display:flex;align-items:center;gap:8px;font-size:1.2rem;margin:14px 0 4px;}
+.section{background:var(--card);border:1px solid #ffffff14;border-inline-start:3px solid var(--c,var(--gold));border-radius:16px;padding:14px;margin-top:14px;animation:fadeUp .4s ease backwards;}
+.section h3{margin:0 0 10px;font-size:.85rem;color:var(--muted);font-weight:600;}
+textarea,input[type=text],input[type=number],input[type=date]{width:100%;background:var(--bg2);border:1px solid #ffffff22;color:var(--text);border-radius:10px;padding:9px 11px;font-size:.88rem;font-family:inherit;}
+textarea{resize:vertical;min-height:44px;}
+.row{display:flex;gap:8px;margin-bottom:8px;}
+.row>*{flex:1;}
+.miniLbl{font-size:.72rem;color:var(--muted);margin-bottom:4px;display:block;}
+.bar2{height:8px;border-radius:5px;background:#ffffff18;overflow:hidden;margin-top:8px;}
+.bar2 i{display:block;height:100%;width:0%;background:var(--c);border-radius:5px;}
+.goal{background:var(--bg2);border:1px solid #ffffff14;border-radius:12px;padding:10px;margin-top:8px;}
+.goal .gtop{display:flex;align-items:center;gap:8px;}
+.goal input[type=checkbox]{width:18px;height:18px;accent-color:var(--c);}
+.goal .gname{flex:1;background:none;border:none;color:var(--text);font-size:.88rem;}
+.badges{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap;}
+.badge{width:10px;height:10px;border-radius:50%;}
+.smallbtn{background:none;border:1px dashed #ffffff33;color:var(--muted);border-radius:10px;padding:8px;width:100%;font-size:.8rem;cursor:pointer;margin-top:8px;}
+.field{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.field .fname{width:38%;font-size:.78rem;color:var(--muted);}
+.del{background:none;border:none;color:#ff6b6b88;font-size:1.1rem;cursor:pointer;padding:0 4px;}
+.chip{display:inline-block;font-size:.68rem;padding:3px 8px;border-radius:20px;margin-inline-end:4px;margin-top:2px;}
+.streak{font-size:.75rem;color:var(--gold);margin-top:4px;}
+.person{background:var(--bg2);border-radius:12px;padding:10px;margin-top:8px;}
+.aiOut{white-space:pre-wrap;font-size:.85rem;line-height:1.7;color:var(--text);}
+.loading{color:var(--muted);font-size:.85rem;}
+</style>
+</head>
+<body>
+<div class="stars"></div>
+<header><h1>✦ نظام حياتي ✦</h1>
+  <div style="display:flex;gap:8px;justify-content:center;margin-top:8px;">
+    <button id="exportBtn" style="background:none;border:1px solid #ffffff33;color:var(--muted);border-radius:10px;padding:5px 10px;font-size:.68rem;cursor:pointer;">⬇️ نسخة احتياطية</button>
+    <label style="background:none;border:1px solid #ffffff33;color:var(--muted);border-radius:10px;padding:5px 10px;font-size:.68rem;cursor:pointer;">⬆️ استرجاع<input type="file" id="importInput" accept="application/json" style="display:none;"></label>
+  </div>
+</header>
+<div class="wrap">
+  <div class="hexgrid" id="hexgrid">
+    <div class="center" id="centerBtn">
+      <div class="pt">Purpose</div>
+      <div class="pv" id="purposePreview">دوس لكتابة رؤيتك</div>
+    </div>
+    <div class="orbitRing" id="orbitRing"></div>
+    <div class="moonOrbit" id="moonBtn" title="New Habits">🌙</div>
+  </div>
+  <div class="quote" id="quoteBox"></div>
+  <button class="aibtn" id="aiOverviewBtn">🔮 نظرة شاملة من الذكاء الاصطناعي</button>
+</div>
+
+<!-- Node overlay -->
+<div class="ov" id="nodeOv">
+  <div class="landingFlash" id="landingFlash"></div>
+  <div class="sheet">
+    <div class="sheet-top"><button class="close" onclick="closeOv('nodeOv')">✕</button></div>
+    <h2 id="nodeTitle"></h2>
+    <div id="specialPanel"></div>
+    <div class="section" id="genWhereAt">
+      <h3>فين واقف؟</h3>
+      <textarea id="whereAt" placeholder="اكتب وصف موقفك الحالي..."></textarea>
+    </div>
+    <div class="section" id="genWhereTo">
+      <h3>فين عايز توصل؟</h3>
+      <textarea id="whereTo" placeholder="اكتب هدفك..."></textarea>
+      <div class="bar2"><i id="nodeBar"></i></div>
+      <input type="range" min="0" max="100" value="30" id="progressSlider" style="width:100%;margin-top:8px;">
+    </div>
+    <div class="section" id="genFields">
+      <h3>حقول مخصصة</h3>
+      <div id="customFields"></div>
+      <button class="smallbtn" onclick="addField()">+ ضيف حقل</button>
+    </div>
+    <div class="section">
+      <h3 id="goalsHeading">الأهداف والمهام</h3>
+      <div id="goalsList"></div>
+      <button class="smallbtn" onclick="addGoal()">+ ضيف هدف/مهمة</button>
+    </div>
+    <div class="section">
+      <h3>سجل آخر 14 يوم</h3>
+      <div class="bar2" style="height:40px;display:flex;align-items:flex-end;gap:2px;background:none;" id="miniHistory"></div>
+    </div>
+    <button class="aibtn" onclick="askAiNode()">💬 اتكلم مع الـ AI عن الحتة دي</button>
+    <div id="nodeAiOut" class="section" style="display:none;"><div class="aiOut" id="nodeAiText"></div></div>
+  </div>
+</div>
+
+<!-- Purpose overlay -->
+<div class="ov" id="purposeOv">
+  <div class="sheet">
+    <div class="sheet-top"><button class="close" onclick="closeOv('purposeOv')">✕</button></div>
+    <h2>🎯 Purpose</h2>
+    <div class="section">
+      <h3>رؤيتك</h3>
+      <textarea id="purposeText" placeholder="اكتب رؤيتك اللي بتوجه حياتك..." style="min-height:80px;"></textarea>
+    </div>
+    <div class="section">
+      <h3>مؤشر الاتساق</h3>
+      <div class="bar2"><i id="alignBar" style="background:var(--gold);"></i></div>
+      <div class="miniLbl" id="alignLbl" style="margin-top:6px;"></div>
+    </div>
+    <div class="section">
+      <h3>✨ القدوات والعبارات الملهمة</h3>
+      <div id="mentorsList"></div>
+      <div class="row" style="margin-top:8px;">
+        <input type="text" id="mentorName" placeholder="اسم الشخص">
+      </div>
+      <textarea id="mentorQuote" placeholder="العبارة الملهمة..."></textarea>
+      <button class="smallbtn" onclick="addMentor()">+ ضيف قدوة</button>
+    </div>
+  </div>
+</div>
+
+<!-- Habits overlay -->
+<div class="ov" id="habitsOv">
+  <div class="sheet">
+    <div class="sheet-top"><button class="close" onclick="closeOv('habitsOv')">✕</button></div>
+    <h2>🌙 New Habits</h2>
+    <div class="section">
+      <h3>عادات بتتعمل ريفريش كل يوم</h3>
+      <div id="habitsList"></div>
+      <div class="inlineForm">
+        <input type="text" id="habitNewName" placeholder="عادة جديدة عايز تبنيها...">
+        <button class="ok" id="habitAddBtn" style="background:var(--gold);color:#1a1430;border-radius:8px;padding:9px;">+ ضيف عادة</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AI overview overlay -->
+<div class="ov" id="aiOv">
+  <div class="sheet">
+    <div class="sheet-top"><button class="close" onclick="closeOv('aiOv')">✕</button></div>
+    <h2>🔮 نظرة شاملة</h2>
+    <div class="section"><div class="aiOut" id="aiOverviewText">جاري التحليل...</div></div>
+  </div>
+</div>
+
+<script>
+const ICONS = {
+  spiritual:'<circle cx="12" cy="12" r="4"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4M5 5l2.8 2.8M16.2 16.2 19 19M19 5l-2.8 2.8M7.8 16.2 5 19"/>',
+  intellectual:'<path d="M4 19V6a2 2 0 0 1 2-2h5v17H6a2 2 0 0 1-2-2Z"/><path d="M20 19V6a2 2 0 0 0-2-2h-5v17h5a2 2 0 0 0 2-2Z"/>',
+  body:'<circle cx="12" cy="5" r="2.4"/><path d="M12 8v6M9 11h6M8 21l4-7 4 7M9 15l-3 2M15 15l3 2"/>',
+  social:'<circle cx="8" cy="9" r="3"/><circle cx="17" cy="9" r="2.6"/><path d="M2 20c0-3.3 2.7-5.5 6-5.5s6 2.2 6 5.5M15 14.7c2.7.3 4.8 2.3 4.8 5.3"/>',
+  finance:'<path d="M12 2v20M17 6.5c0-1.9-2.2-3-5-3s-5 1.3-5 3.2c0 3.8 10 2 10 6.3 0 2-2.2 3.2-5 3.2s-5-1.1-5-3"/>',
+  career:'<path d="M4 10 12 6l8 4-8 4-8-4Z"/><path d="M6 12v5c0 1 2.7 2.2 6 2.2s6-1.2 6-2.2v-5"/>',
+};
+const CATS = [
+  {id:'spiritual', name:'Spiritual', c:'var(--spiritual)'},
+  {id:'intellectual', name:'Intellectual', c:'var(--intellectual)'},
+  {id:'body', name:'Body', c:'var(--body)'},
+  {id:'social', name:'Social', c:'var(--social)'},
+  {id:'finance', name:'Finance', c:'var(--finance)'},
+  {id:'career', name:'Career', c:'var(--career)'},
+];
+
+let DATA = JSON.parse(localStorage.getItem('hexlife_data')||'null') || {
+  purpose:{text:'', align:30},
+  mentors:[],
+  habits:[],
+  nodes:{}
+};
+if(!DATA.habits) DATA.habits = [];
+CATS.forEach(c=>{ if(!DATA.nodes[c.id]) DATA.nodes[c.id]={whereAt:'',whereTo:'',progress:30,fields:[],goals:[],history:[]}; });
+if(!DATA.nodes.body.weekPlan) DATA.nodes.body.weekPlan = {sat:'',sun:'',mon:'',tue:'',wed:'',thu:'',fri:''};
+if(!DATA.nodes.body.weekDone) DATA.nodes.body.weekDone = {sat:false,sun:false,mon:false,tue:false,wed:false,thu:false,fri:false};
+if(!DATA.nodes.body.weightLog) DATA.nodes.body.weightLog = [];
+if(!DATA.nodes.body.workoutLog) DATA.nodes.body.workoutLog = [];
+if(!DATA.nodes.body.gymDays) DATA.nodes.body.gymDays = [];
+if(!DATA.nodes.body.dayPlans) DATA.nodes.body.dayPlans = {};
+if(!DATA.nodes.body.recurring) DATA.nodes.body.recurring = [];
+if(!DATA.nodes.intellectual.books) DATA.nodes.intellectual.books = [];
+if(!DATA.nodes.career.mode) DATA.nodes.career.mode = '';
+if(!DATA.nodes.career.major) DATA.nodes.career.major = '';
+if(!DATA.nodes.career.timetable) DATA.nodes.career.timetable = [];
+if(!DATA.nodes.career.subjects) DATA.nodes.career.subjects = [];
+if(!DATA.nodes.spiritual.prayers) DATA.nodes.spiritual.prayers = {fajr:false,dhuhr:false,asr:false,maghrib:false,isha:false};
+if(!DATA.nodes.spiritual.prayerDate) DATA.nodes.spiritual.prayerDate = '';
+if(DATA.nodes.spiritual.istighfar===undefined) DATA.nodes.spiritual.istighfar = 0;
+if(!DATA.nodes.spiritual.istigDate) DATA.nodes.spiritual.istigDate = '';
+if(!DATA.nodes.spiritual.fastLog) DATA.nodes.spiritual.fastLog = {};
+if(!DATA.nodes.social.circles) DATA.nodes.social.circles = {family:[],friends:[],colleagues:[]};
+if(!DATA.nodes.finance.ledger) DATA.nodes.finance.ledger = [];
+if(DATA.nodes.finance.points===undefined) DATA.nodes.finance.points = 0;
+const today = ()=> new Date().toISOString().slice(0,10);
+// daily reset for prayers/istighfar
+if(DATA.nodes.spiritual.prayerDate !== today()){ DATA.nodes.spiritual.prayers={fajr:false,dhuhr:false,asr:false,maghrib:false,isha:false}; DATA.nodes.spiritual.prayerDate = today(); }
+if(DATA.nodes.spiritual.istigDate !== today()){ DATA.nodes.spiritual.istighfar = 0; DATA.nodes.spiritual.istigDate = today(); }
+
+function save(){ localStorage.setItem('hexlife_data', JSON.stringify(DATA)); }
+
+// layout hexagon points + connector lines
+function layout(){
+  const grid = document.getElementById('hexgrid');
+  const R = 150, CX=210, CY=210; // in svg viewbox units (0-420)
+  const pts = CATS.map((c,i)=>{
+    const angle = (-90 + i*60) * Math.PI/180;
+    return {x: CX + R*Math.cos(angle), y: CY + R*Math.sin(angle)};
+  });
+
+  let svg = document.getElementById('linksSvg');
+  if(!svg){
+    svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('class','links'); svg.setAttribute('id','linksSvg');
+    svg.setAttribute('viewBox','0 0 420 420');
+    svg.innerHTML = `<defs><linearGradient id="linkGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="var(--gold)"/><stop offset="100%" stop-color="#8b7cf6"/>
+    </linearGradient></defs>`;
+    grid.insertBefore(svg, grid.firstChild);
+  }
+  // hexagon outline
+  const outline = pts.map(p=>`${p.x},${p.y}`).join(' L ');
+  let hexPath = svg.querySelector('.hex');
+  if(!hexPath){ hexPath = document.createElementNS('http://www.w3.org/2000/svg','path'); hexPath.setAttribute('class','hex'); svg.appendChild(hexPath); }
+  hexPath.setAttribute('d', `M ${outline} Z`);
+  // spokes to center
+  pts.forEach((p,i)=>{
+    let sp = svg.querySelector('.spoke'+i);
+    if(!sp){ sp = document.createElementNS('http://www.w3.org/2000/svg','path'); sp.setAttribute('class','spoke spoke'+i); svg.appendChild(sp); }
+    sp.setAttribute('d', `M ${CX} ${CY} L ${p.x} ${p.y}`);
+  });
+
+  CATS.forEach((c,i)=>{
+    let el = document.getElementById('pt_'+c.id);
+    let isNew = false;
+    if(!el){
+      isNew = true;
+      el = document.createElement('div');
+      el.className='hexpoint';
+      el.id='pt_'+c.id;
+      el.style.setProperty('--c', c.c);
+      el.innerHTML = `<svg class="ic" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${ICONS[c.id]}</svg><div class="lb">${c.name}</div><div class="bar"><i></i></div>`;
+      el.onclick = ()=>openNode(c.id, el);
+      // spawn from center, dim, invisible
+      el.style.left = 'calc(50% - 52px)'; el.style.top = 'calc(50% - 52px)';
+      grid.appendChild(el);
+    }
+    const finalLeft = `calc(${(pts[i].x/420)*100}% - 52px)`;
+    const finalTop = `calc(${(pts[i].y/420)*100}% - 52px)`;
+    if(isNew){
+      requestAnimationFrame(()=> requestAnimationFrame(()=>{
+        setTimeout(()=>{
+          el.style.left = finalLeft; el.style.top = finalTop;
+          el.classList.add('live');
+          setTimeout(()=> el.classList.add('animate'), 950);
+        }, i*160);
+      }));
+    } else { el.style.left = finalLeft; el.style.top = finalTop; }
+    el.querySelector('.bar i').style.width = DATA.nodes[c.id].progress+'%';
+    let dot = el.querySelector('.alertDot');
+    if(needsAttention(c.id)){ if(!dot){ dot=document.createElement('div'); dot.className='alertDot'; el.appendChild(dot); } }
+    else if(dot) dot.remove();
+  });
+}
+const ARDAY = ['حد','اتنين','تلات','اربع','خميس','جمعة','سبت'];
+function needsAttention(id){
+  const n = DATA.nodes[id];
+  if(id==='spiritual') return Object.values(n.prayers).filter(Boolean).length < 5;
+  if(id==='body') return (n.recurring||[]).some(r=> r.lastDone && (r.interval - Math.floor((new Date(today())-new Date(r.lastDone))/86400000)) <= 0);
+  if(id==='career'){
+    const todayLabel = ARDAY[new Date().getDay()];
+    return (n.subjects||[]).some(s=> (s.events||[]).some(ev=> ev.day===todayLabel && !ev.attended));
+  }
+  return false;
+}
+document.getElementById('centerBtn').onclick = openPurpose;
+document.getElementById('moonBtn').onclick = openHabits;
+function openHabits(){ renderHabits(); document.getElementById('habitsOv').classList.add('show'); }
+function renderHabits(){
+  const c = document.getElementById('habitsList');
+  c.innerHTML = DATA.habits.map((h,i)=>{
+    const doneToday = h.dates.includes(today());
+    const streak = computeHabitStreak(h);
+    return `<div class="goal"><div class="gtop"><input type="checkbox" class="hDone" data-i="${i}" ${doneToday?'checked':''}><span class="gname" style="${doneToday?'opacity:.6;text-decoration:line-through;':''}">${h.name}</span><button class="del hDel" data-i="${i}">✕</button></div><div class="streak" style="margin-top:4px;">🔥 ${streak} يوم متتالي — إجمالي ${h.dates.length}</div></div>`;
+  }).join('') || '<span class="miniLbl">لسه مفيش عادات مضافة</span>';
+  c.querySelectorAll('.hDone').forEach(cb=> cb.onchange=(e)=>{
+    const h = DATA.habits[+cb.dataset.i]; const d = today();
+    if(e.target.checked){ if(!h.dates.includes(d)) h.dates.push(d); } else { h.dates = h.dates.filter(x=>x!==d); }
+    save(); renderHabits(); layout();
+  });
+  c.querySelectorAll('.hDel').forEach(b=> b.onclick=()=>{ DATA.habits.splice(+b.dataset.i,1); save(); renderHabits(); });
+}
+function computeHabitStreak(h){
+  let s=0, d=new Date();
+  while(true){ const key=d.toISOString().slice(0,10); if(h.dates.includes(key)){ s++; d.setDate(d.getDate()-1); } else break; }
+  return s;
+}
+document.getElementById('habitAddBtn').onclick=()=>{
+  const inp = document.getElementById('habitNewName');
+  const name = inp.value.trim(); if(!name) return;
+  DATA.habits.push({name, dates:[], created:today()});
+  inp.value=''; save(); renderHabits();
+};
+document.getElementById('habitNewName').onkeydown=(e)=>{ if(e.key==='Enter') document.getElementById('habitAddBtn').click(); };
+
+function refreshPurposePreview(){
+  document.getElementById('purposePreview').textContent = DATA.purpose.text ? DATA.purpose.text.slice(0,40)+(DATA.purpose.text.length>40?'…':'') : 'دوس لكتابة رؤيتك';
+  showQuote();
+  renderOrbit();
+}
+function renderOrbit(){
+  const ring = document.getElementById('orbitRing');
+  ring.innerHTML='';
+  const n = DATA.mentors.length;
+  if(n===0){ const e = document.createElement('div'); e.className='orbitEmpty'; ring.appendChild(e); return; }
+  DATA.mentors.forEach((m,i)=>{
+    const dot = document.createElement('div');
+    dot.className='orbitDot';
+    dot.textContent = (m.name||'؟').trim().charAt(0);
+    dot.title = m.name||'قدوة';
+    dot.style.animationDelay = (-(16/n)*i)+'s';
+    dot.onclick = (e)=>{ e.stopPropagation(); openPurpose(); };
+    ring.appendChild(dot);
+  });
+}
+function showQuote(){
+  const box = document.getElementById('quoteBox');
+  if(DATA.mentors.length===0){ box.innerHTML=''; return; }
+  const m = DATA.mentors[Math.floor(Math.random()*DATA.mentors.length)];
+  box.innerHTML = `"${m.quote}" <br><b>— ${m.name||'قدوة'}</b>`;
+}
+
+let currentNode = null;
+function openNode(id, srcEl){
+  currentNode = id;
+  const cat = CATS.find(c=>c.id===id);
+  const n = DATA.nodes[id];
+  const ov = document.getElementById('nodeOv');
+  ov.classList.remove('show');
+  const flash = document.getElementById('landingFlash');
+  flash.style.setProperty('--c', cat.c);
+  flash.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" style="width:60%;height:60%;">${ICONS[id]}</svg>`;
+  if(srcEl){
+    const r = srcEl.getBoundingClientRect();
+    flash.style.left = (r.left + r.width/2) + 'px';
+    flash.style.top = (r.top + r.height/2) + 'px';
+  } else { flash.style.left='50%'; flash.style.top='50%'; }
+  flash.classList.remove('go'); void flash.offsetWidth; flash.classList.add('go');
+  let revealed = false;
+  const reveal = ()=>{ if(revealed) return; revealed = true; ov.classList.add('show'); flash.removeEventListener('animationend', reveal); };
+  flash.addEventListener('animationend', reveal);
+  setTimeout(reveal, 1450);
+  document.getElementById('nodeTitle').innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" style="width:22px;height:22px;vertical-align:-4px;">${ICONS[cat.id]}</svg> ${cat.name}`;
+  document.getElementById('nodeTitle').style.color = cat.c;
+  document.getElementById('nodeOv').style.setProperty('--c', cat.c);
+  document.getElementById('whereAt').value = n.whereAt;
+  document.getElementById('whereTo').value = n.whereTo;
+  document.getElementById('progressSlider').value = n.progress;
+  document.getElementById('progressSlider').style.accentColor = cat.c;
+  document.getElementById('nodeBar').style.width = n.progress+'%';
+  document.getElementById('nodeBar').style.background = cat.c;
+  document.getElementById('nodeAiOut').style.display='none';
+  const hasSpecial = ['body','career','spiritual','social','finance','intellectual'].includes(id);
+  document.getElementById('genWhereAt').style.display = hasSpecial?'none':'block';
+  document.getElementById('genFields').style.display = hasSpecial?'none':'block';
+  document.getElementById('goalsHeading').textContent = id==='spiritual' ? 'أهداف إضافية (اختياري)' : 'الأهداف والمهام';
+  renderSpecial(id);
+  renderFields(); renderGoals(); renderHistory();
+}
+function closeOv(id){ document.getElementById(id).classList.remove('show'); saveNode(); layout(); refreshPurposePreview(); }
+
+document.getElementById('whereAt').oninput = ()=>{ DATA.nodes[currentNode].whereAt = document.getElementById('whereAt').value; save(); };
+document.getElementById('whereTo').oninput = ()=>{ DATA.nodes[currentNode].whereTo = document.getElementById('whereTo').value; save(); };
+document.getElementById('progressSlider').oninput = (e)=>{
+  DATA.nodes[currentNode].progress = +e.target.value;
+  document.getElementById('nodeBar').style.width = e.target.value+'%';
+  save();
+};
+function saveNode(){
+  if(!currentNode) return;
+  const today = new Date().toISOString().slice(0,10);
+  const n = DATA.nodes[currentNode];
+  n.history = n.history.filter(h=>h.d!==today);
+  n.history.push({d:today, v:n.progress});
+  if(n.history.length>30) n.history.shift();
+  save();
+}
+
+function renderSpecial(id){
+  const el = document.getElementById('specialPanel');
+  if(id==='body') return renderBody(el);
+  if(id==='career') return renderCareer(el);
+  if(id==='spiritual') return renderSpiritual(el);
+  if(id==='social') return renderSocial(el);
+  if(id==='finance') return renderFinance(el);
+  if(id==='intellectual') return renderIntellectual(el);
+  el.innerHTML='';
+}
+const DAYS = [['sat','سبت'],['sun','حد'],['mon','اتنين'],['tue','تلات'],['wed','اربع'],['thu','خميس'],['fri','جمعة']];
+
+function renderBody(el){
+  const n = DATA.nodes.body;
+  const lastW = n.weightLog.length? n.weightLog[n.weightLog.length-1].w : '—';
+  const activeDays = n.gymDays && n.gymDays.length ? DAYS.filter(([k])=>n.gymDays.includes(k)) : [];
+  el.innerHTML = `
+  <div class="section"><h3>أيام الجيم بتاعتك</h3>
+    ${activeDays.length===0 ? `
+      <div class="miniLbl">اختار الأيام اللي بتروح فيها الجيم</div>
+      <div class="prayerGrid" id="dayPicker">${DAYS.map(([k,l])=>`<div class="prayerChip" data-d="${k}">${l}</div>`).join('')}</div>
+      <button class="smallbtn" id="saveDaysBtn">تمام، دي أيامي</button>
+    ` : `
+      ${activeDays.map(([k,l])=>`
+        <div class="goal" style="border-inline-start:3px solid var(--c);">
+          <b style="color:var(--c);font-size:.85rem;">${l}</b>
+          <div style="margin-top:6px;">${(n.dayPlans[k]||[]).map((ex,i)=>`
+            <div class="dayRow" style="padding:6px 8px;">
+              <input type="checkbox" class="exDone" data-day="${k}" data-i="${i}" ${ex.done?'checked':''}>
+              <span style="flex:1;font-size:.82rem;${ex.done?'opacity:.5;text-decoration:line-through;':''}">${ex.name}</span>
+              <input type="number" class="exW" data-day="${k}" data-i="${i}" value="${ex.weight||''}" placeholder="كجم" style="width:46px;flex:none;">
+              <span style="font-size:.68rem;color:var(--muted);">×</span>
+              <input type="number" class="exR" data-day="${k}" data-i="${i}" value="${ex.reps||''}" placeholder="عدات" style="width:38px;flex:none;">
+              <button class="del exDel" data-day="${k}" data-i="${i}">✕</button>
+            </div>`).join('') || `<span class="miniLbl">لسه مفيش تمارين ليوم ${l}</span>`}</div>
+          <div class="inlineForm" style="margin-top:6px;">
+            <input type="text" class="exNewName" data-day="${k}" placeholder="اسم التمرين">
+            <div class="row"><input type="number" class="exNewW" data-day="${k}" placeholder="الوزن (كجم)"><input type="number" class="exNewR" data-day="${k}" placeholder="عدد العدات"></div>
+            <button type="button" class="ok exAddBtn" data-day="${k}" style="background:var(--c);color:#111;border-radius:8px;padding:8px;">إضافة لـ${l}</button>
+          </div>
+        </div>`).join('')}
+      <button class="smallbtn" id="editDaysBtn" style="color:var(--muted);">تغيير الأيام</button>
+    `}
+  </div>
+  <div class="section"><h3>سجل الوزن</h3>
+    <div class="miniStat"><div class="box"><b>${lastW}</b><span>آخر وزن مسجل (كجم)</span></div><div class="box"><b>${n.weightLog.length}</b><span>عدد التسجيلات</span></div></div>
+    <div class="row" style="margin-top:10px;"><input type="number" id="wInput" placeholder="وزنك النهارده" step="0.1"><button class="smallbtn" style="width:auto;padding:9px 16px;" id="wAddBtn">سجل</button></div>
+  </div>
+  <div class="section"><h3>🔁 تذكيرات دورية</h3>
+    <div class="miniLbl">حاجات زي تغيير الملايات، تنظيف الأوضة، حلاقة... أي حاجة بتتكرر كل فترة</div>
+    ${n.recurring.map((r,i)=>{
+      const daysLeft = r.lastDone ? r.interval - Math.floor((new Date(today())-new Date(r.lastDone))/86400000) : null;
+      const overdue = daysLeft!==null && daysLeft<=0;
+      const statusTxt = r.lastDone ? (overdue? `متأخر ${Math.abs(daysLeft)} يوم!` : `باقي ${daysLeft} يوم`) : 'لسه معملتهاش';
+      return `<div class="dayRow" style="align-items:center;">
+        <span style="flex:1;font-size:.8rem;">${r.name} <span style="color:${overdue?'#f87171':'var(--muted)'};font-size:.7rem;">— ${statusTxt}</span></span>
+        <button class="rDone" data-i="${i}" style="background:var(--c);border:none;color:#111;font-size:.68rem;padding:5px 9px;border-radius:8px;">عملتها</button>
+        <button class="del rDel" data-i="${i}">✕</button>
+      </div>`;
+    }).join('') || '<span class="miniLbl">لسه مفيش تذكيرات مضافة</span>'}
+    <div class="inlineForm">
+      <input type="text" id="rName" placeholder="اسم التذكير (مثلاً: تغيير الملايات)">
+      <div class="row"><input type="number" id="rInterval" placeholder="كل كام يوم؟"><button type="button" class="ok" id="rAddBtn" style="background:var(--gold);color:#1a1430;border-radius:8px;">+ ضيف</button></div>
+    </div>
+  </div>`;
+  el.querySelectorAll('.exDone').forEach(cb=> cb.onchange=(e)=>{ n.dayPlans[cb.dataset.day][+cb.dataset.i].done=e.target.checked; save(); renderBody(el); });
+  el.querySelectorAll('.exW').forEach(inp=> inp.onchange=(e)=>{ n.dayPlans[inp.dataset.day][+inp.dataset.i].weight=e.target.value; save(); });
+  el.querySelectorAll('.exR').forEach(inp=> inp.onchange=(e)=>{ n.dayPlans[inp.dataset.day][+inp.dataset.i].reps=e.target.value; save(); });
+  el.querySelectorAll('.exDel').forEach(b=> b.onclick=()=>{ n.dayPlans[b.dataset.day].splice(+b.dataset.i,1); save(); renderBody(el); });
+  el.querySelectorAll('.exAddBtn').forEach(b=>{
+    const commit=()=>{
+      const nameInp = el.querySelector(`.exNewName[data-day="${b.dataset.day}"]`);
+      const wInp = el.querySelector(`.exNewW[data-day="${b.dataset.day}"]`);
+      const rInp = el.querySelector(`.exNewR[data-day="${b.dataset.day}"]`);
+      const name = nameInp.value.trim(); if(!name) return;
+      if(!n.dayPlans[b.dataset.day]) n.dayPlans[b.dataset.day]=[];
+      n.dayPlans[b.dataset.day].push({name, weight:wInp.value, reps:rInp.value, done:false});
+      save(); renderBody(el);
+    };
+    b.onclick = commit;
+    [`.exNewName`,`.exNewW`,`.exNewR`].forEach(sel=> el.querySelector(`${sel}[data-day="${b.dataset.day}"]`).onkeydown=(e)=>{ if(e.key==='Enter') commit(); });
+  });
+  if(document.getElementById('saveDaysBtn')){
+    const picked = new Set();
+    el.querySelectorAll('#dayPicker .prayerChip').forEach(ch=> ch.onclick=()=>{ const k=ch.dataset.d; if(picked.has(k)){picked.delete(k);ch.classList.remove('done');} else {picked.add(k);ch.classList.add('done');} });
+    document.getElementById('saveDaysBtn').onclick=()=>{ if(picked.size===0)return; n.gymDays=[...picked]; save(); renderBody(el); };
+  }
+  if(document.getElementById('editDaysBtn')) document.getElementById('editDaysBtn').onclick=()=>{ n.gymDays=[]; save(); renderBody(el); };
+  document.getElementById('wAddBtn').onclick=()=>{
+    const v = parseFloat(document.getElementById('wInput').value);
+    if(!v) return;
+    n.weightLog.push({d:today(), w:v}); if(n.weightLog.length>60) n.weightLog.shift();
+    save(); renderBody(el);
+  };
+  document.getElementById('rAddBtn').onclick=()=>{
+    const name = document.getElementById('rName').value.trim();
+    const interval = +document.getElementById('rInterval').value;
+    if(!name||!interval) return;
+    n.recurring.push({name, interval, lastDone:''});
+    save(); renderBody(el);
+  };
+  el.querySelectorAll('.rDone').forEach(b=> b.onclick=()=>{ n.recurring[+b.dataset.i].lastDone=today(); save(); renderBody(el); });
+  el.querySelectorAll('.rDel').forEach(b=> b.onclick=()=>{ n.recurring.splice(+b.dataset.i,1); save(); renderBody(el); });
+}
+
+function renderIntellectual(el){
+  const n = DATA.nodes.intellectual;
+  el.innerHTML = `<div class="section"><h3>📚 الكتب اللي بتقراها</h3>
+    <div id="booksList">${n.books.map((b,i)=>{
+      const pct = b.total? Math.min(100, Math.round(b.read/b.total*100)) : 0;
+      return `<div class="subjRow" data-i="${i}">
+        <div class="stop"><input type="text" class="bname" value="${b.title}"><button class="del bdel">✕</button></div>
+        <div class="bar2"><i style="width:${pct}%"></i></div>
+        <div class="row" style="margin-top:6px;align-items:center;">
+          <span class="miniLbl" style="margin:0;">${b.read} / ${b.total} صفحة (${pct}%)</span>
+          <input type="number" class="bread" placeholder="+ صفحات قريتها" style="max-width:130px;">
+        </div>
+      </div>`;}).join('')||'<span class="miniLbl">لسه مفيش كتب مضافة</span>'}</div>
+    <div class="inlineForm">
+      <input type="text" id="bkTitle" placeholder="اسم الكتاب">
+      <input type="number" id="bkTotal" placeholder="عدد صفحاته الكلي">
+      <button class="ok" id="bkAddBtn" style="background:var(--gold);color:#1a1430;border-radius:8px;padding:9px;">+ ضيف كتاب</button>
+    </div>
+  </div>`;
+  el.querySelectorAll('.subjRow').forEach(row=>{
+    const i = +row.dataset.i;
+    row.querySelector('.bname').oninput=(e)=>{ n.books[i].title=e.target.value; save(); };
+    row.querySelector('.bdel').onclick=()=>{ n.books.splice(i,1); save(); renderIntellectual(el); };
+    row.querySelector('.bread').onkeydown=(e)=>{
+      if(e.key==='Enter'){ const add=+e.target.value; if(add){ n.books[i].read=Math.min(n.books[i].total, n.books[i].read+add); save(); renderIntellectual(el); } }
+    };
+  });
+  document.getElementById('bkAddBtn').onclick=()=>{
+    const title = document.getElementById('bkTitle').value.trim();
+    const total = +document.getElementById('bkTotal').value;
+    if(!title||!total) return;
+    n.books.push({title, total, read:0});
+    save(); renderIntellectual(el);
+  };
+}
+
+function renderCareer(el){
+  const n = DATA.nodes.career;
+  if(n.mode!=='student'){
+    el.innerHTML = `<div class="section"><h3>وضعك دلوقتي؟</h3>
+      <div class="modeSel"><button id="modeStudent">طالب</button><button id="modeOther">حاجة تانية</button></div></div>`;
+    document.getElementById('modeStudent').onclick=()=>{ n.mode='student'; save(); renderCareer(el); };
+    document.getElementById('modeOther').onclick=()=>{ n.mode='other'; save(); renderCareer(el); };
+    return;
+  }
+  if(!n.major){
+    el.innerHTML = `<div class="section"><h3>إيه تخصصك؟</h3>
+      <div class="inlineForm"><input type="text" id="majorInput" placeholder="مثلاً: طب بشري"><button class="ok" id="majorSaveBtn" style="background:var(--gold);color:#1a1430;border-radius:8px;padding:9px;">حفظ</button></div>
+      <button class="smallbtn" style="color:var(--muted);" id="changeModeBtn2">تغيير الوضع</button>
+    </div>`;
+    const commitMajor=()=>{ const v=document.getElementById('majorInput').value.trim(); if(!v)return; n.major=v; save(); renderCareer(el); };
+    document.getElementById('majorSaveBtn').onclick=commitMajor;
+    document.getElementById('majorInput').onkeydown=(e)=>{ if(e.key==='Enter') commitMajor(); };
+    document.getElementById('changeModeBtn2').onclick=()=>{ n.mode=''; save(); renderCareer(el); };
+    return;
+  }
+  el.innerHTML = `<div class="section"><h3>🎓 ${n.major} <button class="smallbtn" id="editMajorBtn" style="display:inline;width:auto;padding:2px 8px;margin:0 0 0 8px;">تعديل</button></h3>
+    <div id="subjList">${n.subjects.map((s,i)=>`
+      <div class="subjRow" data-i="${i}">
+        <div class="stop"><input type="text" class="sname" value="${s.name}"><button class="del sdel">✕</button></div>
+        <div class="row" style="margin-top:6px;">
+          <div style="flex:1"><span class="miniLbl">ساعات مذاكرة</span><input type="number" class="shours" value="${s.hours||0}"></div>
+          <div style="flex:1"><span class="miniLbl">آخر درجة</span><input type="text" class="sgrade" value="${s.grade||''}"></div>
+        </div>
+        <div class="miniLbl" style="margin-top:8px;">معاد المحاضرات والسكاشن</div>
+        ${(s.events||[]).map((ev,ei)=>`
+          <div class="dayRow" data-si="${i}" data-ei="${ei}" style="flex-wrap:wrap;align-items:center;">
+            <span style="flex:1;font-size:.78rem;min-width:100%;margin-bottom:4px;">${ev.label} — ${ev.day} ${ev.time||''}</span>
+            <label class="tagchip" style="border-color:${ev.attended?'#4ade80':'#ffffff33'};${ev.attended?'background:#4ade80;color:#111;':''}"><input type="checkbox" class="evA" data-si="${i}" data-ei="${ei}" ${ev.attended?'checked':''} style="display:none;">حضرت</label>
+            <label class="tagchip" style="border-color:${ev.studied?'var(--c)':'#ffffff33'};${ev.studied?'background:var(--c);color:#111;':''}"><input type="checkbox" class="evS" data-si="${i}" data-ei="${ei}" ${ev.studied?'checked':''} style="display:none;">ذاكرتها</label>
+            <label class="tagchip" style="border-color:${ev.solved?'#fbbf24':'#ffffff33'};${ev.solved?'background:#fbbf24;color:#111;':''}"><input type="checkbox" class="evSo" data-si="${i}" data-ei="${ei}" ${ev.solved?'checked':''} style="display:none;">حليت عليها</label>
+            <button class="del evDel" data-si="${i}" data-ei="${ei}" style="margin-inline-start:auto;">✕</button>
+          </div>`).join('') || '<span class="miniLbl">لسه مفيش معاد مضاف</span>'}
+        <div class="inlineForm">
+          <input type="text" class="evLabel" placeholder="محاضرة / سكشن / معمل...">
+          <div class="row"><select class="evDay">${DAYS.map(([k,l])=>`<option value="${l}">${l}</option>`).join('')}</select><input type="text" class="evTime" placeholder="الميعاد (اختياري)"></div>
+          <button type="button" class="ok evAdd" style="background:var(--c);color:#111;border-radius:8px;padding:8px;">+ ضيف معاد</button>
+        </div>
+        <div class="miniLbl" style="margin-top:8px;">سجل المذاكرة</div>
+        ${(s.sessions||[]).slice().reverse().slice(0,4).map((sess,si)=>`<div class="ledgerRow"><span style="flex:1">${sess.date}: ${sess.note}</span><span class="amt in">${sess.hours}س</span></div>`).join('')||'<span class="miniLbl">لسه مفيش تسجيلات</span>'}
+        <div class="inlineForm">
+          <input type="text" class="sesNote" placeholder="عملت إيه وحليت إيه النهارده؟">
+          <div class="row"><input type="number" class="sesHours" placeholder="عدد الساعات"><button type="button" class="ok sesAdd">سجل</button></div>
+        </div>
+      </div>`).join('')}</div>
+    <button class="smallbtn" id="addSubjBtn">+ ضيف مادة</button>
+    <button class="smallbtn" style="color:var(--muted);" id="changeModeBtn">تغيير الوضع</button>
+  </div>`;
+  el.querySelectorAll('.subjRow').forEach(row=>{
+    const i = +row.dataset.i;
+    row.querySelector('.sname').oninput=(e)=>{ n.subjects[i].name=e.target.value; save(); };
+    row.querySelector('.shours').oninput=(e)=>{ n.subjects[i].hours=+e.target.value; save(); };
+    row.querySelector('.sgrade').oninput=(e)=>{ n.subjects[i].grade=e.target.value; save(); };
+    row.querySelector('.sdel').onclick=()=>{ n.subjects.splice(i,1); save(); renderCareer(el); };
+    row.querySelector('.evAdd').onclick=()=>{
+      const label = row.querySelector('.evLabel').value.trim(); if(!label) return;
+      if(!n.subjects[i].events) n.subjects[i].events=[];
+      n.subjects[i].events.push({label, day:row.querySelector('.evDay').value, time:row.querySelector('.evTime').value.trim(), attended:false, studied:false, solved:false});
+      save(); renderCareer(el);
+    };
+    row.querySelector('.sesAdd').onclick=()=>{
+      const note = row.querySelector('.sesNote').value.trim();
+      const hrs = +row.querySelector('.sesHours').value || 0;
+      if(!note) return;
+      if(!n.subjects[i].sessions) n.subjects[i].sessions=[];
+      n.subjects[i].sessions.push({date:today(), note, hours:hrs});
+      n.subjects[i].hours = (n.subjects[i].hours||0) + hrs;
+      save(); renderCareer(el);
+    };
+  });
+  el.querySelectorAll('.evA').forEach(cb=> cb.onchange=(e)=>{ n.subjects[+cb.dataset.si].events[+cb.dataset.ei].attended=e.target.checked; save(); renderCareer(el); });
+  el.querySelectorAll('.evS').forEach(cb=> cb.onchange=(e)=>{ n.subjects[+cb.dataset.si].events[+cb.dataset.ei].studied=e.target.checked; save(); renderCareer(el); });
+  el.querySelectorAll('.evSo').forEach(cb=> cb.onchange=(e)=>{ n.subjects[+cb.dataset.si].events[+cb.dataset.ei].solved=e.target.checked; save(); renderCareer(el); });
+  el.querySelectorAll('.evDel').forEach(b=> b.onclick=()=>{ n.subjects[+b.dataset.si].events.splice(+b.dataset.ei,1); save(); renderCareer(el); });
+  document.getElementById('addSubjBtn').onclick=()=>{ n.subjects.push({name:'مادة جديدة',hours:0,grade:'',events:[],sessions:[]}); save(); renderCareer(el); };
+  document.getElementById('changeModeBtn').onclick=()=>{ n.mode=''; n.major=''; save(); renderCareer(el); };
+  document.getElementById('editMajorBtn').onclick=()=>{ n.major=''; save(); renderCareer(el); };
+}
+
+function renderSpiritual(el){
+  const n = DATA.nodes.spiritual;
+  const prayers = [['fajr','الفجر'],['dhuhr','الظهر'],['asr','العصر'],['maghrib','المغرب'],['isha','العشاء']];
+  const doneCount = Object.values(n.prayers).filter(Boolean).length;
+  const fastCount = Object.values(n.fastLog).filter(Boolean).length;
+  el.innerHTML = `<div class="section"><h3>صلاة النهارده (${doneCount}/5)</h3>
+    <div class="prayerGrid">${prayers.map(([k,l])=>`<div class="prayerChip ${n.prayers[k]?'done':''}" data-p="${k}">${l}</div>`).join('')}</div>
+  </div>
+  <div class="section"><h3>الاستغفار النهارده</h3>
+    <button class="istigBtn" id="istigBtn"><b>${n.istighfar}</b>دوس تسجل استغفارة</button>
+  </div>
+  <div class="section"><h3>الصيام</h3>
+    <div class="prayerChip ${n.fastLog[today()]?'done':''}" id="fastChip" style="width:100%;">صمت النهارده</div>
+    <div class="streak">✅ صمت ${fastCount} يوم لحد دلوقتي</div>
+  </div>`;
+  el.querySelectorAll('.prayerChip[data-p]').forEach(chip=> chip.onclick=()=>{ const k=chip.dataset.p; n.prayers[k]=!n.prayers[k]; save(); renderSpiritual(el); });
+  document.getElementById('istigBtn').onclick=()=>{ n.istighfar++; save(); renderSpiritual(el); };
+  document.getElementById('fastChip').onclick=()=>{ n.fastLog[today()] = !n.fastLog[today()]; save(); renderSpiritual(el); };
+}
+function computeFastStreak(n){
+  let s=0, d=new Date();
+  while(true){ const key=d.toISOString().slice(0,10); if(n.fastLog[key]){ s++; d.setDate(d.getDate()-1); } else break; }
+  return s;
+}
+
+function renderSocial(el){
+  const n = DATA.nodes.social;
+  const circles = [['family','دايرة العيلة','#fb923c'],['friends','دايرة الأصدقاء','#38bdf8'],['colleagues','دايرة الزمايل','#a78bfa']];
+  const daysAgo = (d)=>{ if(!d) return null; return Math.floor((new Date(today())-new Date(d))/86400000); };
+  el.innerHTML = circles.map(([k,l,c])=>`
+    <div class="section circleRow" style="border-inline-start-color:${c};">
+      <h4 style="color:${c};">${l}</h4>
+      <div id="c_${k}">${n.circles[k].map((p,i)=>{
+        const da = daysAgo(p.last);
+        const warn = da!==null && da>14;
+        return `<div class="pRow" style="border-inline-start:3px solid ${c};">
+          <span class="pname">${p.name}</span>
+          <span class="plast" style="${warn?'color:#f87171;':''}">${p.last? (da===0?'اتكلمتوا النهارده':da+' يوم من غير تواصل') : 'لسه معملتش'}</span>
+          <button data-k="${k}" data-i="${i}" class="touchBtn" style="background:${c};">تواصلت</button>
+        </div>`;}).join('')}</div>
+      <button class="smallbtn addPerson" data-k="${k}">+ ضيف حد في ${l.replace('دايرة ','')}</button>
+    </div>`).join('');
+  el.querySelectorAll('.touchBtn').forEach(b=> b.onclick=()=>{ n.circles[b.dataset.k][+b.dataset.i].last=today(); save(); renderSocial(el); });
+  el.querySelectorAll('.addPerson').forEach(b=> b.onclick=()=>{
+    if(document.getElementById('newPersonForm')) return;
+    const k = b.dataset.k;
+    const div = document.createElement('div'); div.className='inlineForm'; div.id='newPersonForm';
+    div.innerHTML = `<input type="text" id="pName" placeholder="الاسم"><div class="fbtns"><button class="cancel" type="button">إلغاء</button><button class="ok" type="button">إضافة</button></div>`;
+    b.after(div);
+    const input = div.querySelector('#pName'); input.focus();
+    div.querySelector('.cancel').onclick=()=>div.remove();
+    const commit=()=>{ const name=input.value.trim(); if(!name){div.remove();return;} n.circles[k].push({name,last:''}); save(); renderSocial(el); };
+    div.querySelector('.ok').onclick=commit;
+    input.onkeydown=(e)=>{ if(e.key==='Enter') commit(); };
+  });
+}
+
+function renderFinance(el){
+  const n = DATA.nodes.finance;
+  el.innerHTML = `<div class="section">
+    <div class="miniStat"><div class="box"><b>${n.points}</b><span>رصيد النقاط</span></div></div>
+    <div id="ledgerList" style="margin-top:10px;">${n.ledger.slice().reverse().slice(0,10).map(t=>`
+      <div class="ledgerRow"><span style="flex:1">${t.note||(t.type==='in'?'دخل':t.type==='out'?'مصروف':'استثمار')}</span><span class="amt ${t.type}">${t.type==='out'?'-':'+'}${t.amount}</span></div>`).join('')}</div>
+    <div class="inlineForm" style="margin-top:10px;">
+      <div class="fbtns"><button type="button" class="tf on" data-t="in" style="background:#4ade80;color:#111;">دخل</button><button type="button" class="tf" data-t="out" style="background:#ffffff18;">مصروف</button><button type="button" class="tf" data-t="invest" style="background:#ffffff18;">استثمار</button></div>
+      <input type="number" id="fAmount" placeholder="المبلغ">
+      <div id="quickAmt">${[50,100,200,500].map(v=>`<span class="tagchip" data-v="${v}">${v}</span>`).join('')}</div>
+      <input type="text" id="fNote" placeholder="ملاحظة (اختياري)">
+      <button class="ok" id="fAddBtn" style="background:var(--gold);color:#1a1430;border:none;border-radius:8px;padding:9px;">إضافة</button>
+    </div>
+  </div>`;
+  let type='in';
+  el.querySelectorAll('.tf').forEach(b=> b.onclick=()=>{ type=b.dataset.t; el.querySelectorAll('.tf').forEach(x=>{x.style.background='#ffffff18';x.style.color='var(--text)';}); b.style.background = type==='in'?'#4ade80':type==='out'?'#f87171':'#fbbf24'; b.style.color='#111'; });
+  el.querySelectorAll('#quickAmt .tagchip').forEach(ch=> ch.onclick=()=>{ document.getElementById('fAmount').value = ch.dataset.v; });
+  document.getElementById('fAddBtn').onclick=()=>{
+    const amt = parseFloat(document.getElementById('fAmount').value);
+    if(!amt) return;
+    const note = document.getElementById('fNote').value.trim();
+    n.ledger.push({type, amount:amt, note, date:today()});
+    n.points += (type==='out') ? -amt : amt;
+    save(); renderFinance(el);
+  };
+}
+
+function renderFields(){
+  const n = DATA.nodes[currentNode];
+  const c = document.getElementById('customFields');
+  c.innerHTML='';
+  n.fields.forEach((f,i)=>{
+    const div = document.createElement('div'); div.className='field';
+    div.innerHTML = `<span class="fname">${f.name}</span><input type="text" value="${f.value||''}" style="flex:1"><button class="del">✕</button>`;
+    div.querySelector('input').oninput = (e)=>{ f.value=e.target.value; save(); };
+    div.querySelector('.del').onclick = ()=>{ n.fields.splice(i,1); save(); renderFields(); };
+    c.appendChild(div);
+  });
+}
+function addField(){
+  const c = document.getElementById('customFields');
+  if(document.getElementById('newFieldForm')) return;
+  const div = document.createElement('div'); div.className='inlineForm'; div.id='newFieldForm';
+  div.innerHTML = `<input type="text" id="newFieldName" placeholder="اسم الحقل (مثلاً: الوزن، المادة، الرصيد)">
+    <div class="fbtns"><button class="cancel" type="button">إلغاء</button><button class="ok" type="button">إضافة</button></div>`;
+  c.appendChild(div);
+  const input = div.querySelector('#newFieldName'); input.focus();
+  div.querySelector('.cancel').onclick = ()=> div.remove();
+  const commit = ()=>{
+    const name = input.value.trim();
+    if(!name){ div.remove(); return; }
+    DATA.nodes[currentNode].fields.push({name, value:''});
+    save(); renderFields();
+  };
+  div.querySelector('.ok').onclick = commit;
+  input.onkeydown = (e)=>{ if(e.key==='Enter') commit(); };
+}
+
+function renderGoals(){
+  const n = DATA.nodes[currentNode];
+  const c = document.getElementById('goalsList');
+  c.innerHTML='';
+  n.goals.forEach((g,i)=>{
+    const div = document.createElement('div'); div.className='goal';
+    let badges = (g.tags||[]).map(t=>{
+      const cat = CATS.find(x=>x.id===t);
+      return cat ? `<div class="badge" style="background:${cat.c}" title="${cat.name}"></div>` : '';
+    }).join('');
+    div.innerHTML = `<div class="gtop"><input type="checkbox" ${g.done?'checked':''}><input class="gname" type="text" value="${g.name}"><button class="del">✕</button></div>
+      <div class="badges">${badges}</div>`;
+    div.querySelector('input[type=checkbox]').onchange=(e)=>{ g.done=e.target.checked; save(); };
+    div.querySelector('.gname').oninput=(e)=>{ g.name=e.target.value; save(); };
+    div.querySelector('.del').onclick=()=>{ n.goals.splice(i,1); save(); renderGoals(); };
+    c.appendChild(div);
+  });
+}
+function addGoal(){
+  const c = document.getElementById('goalsList');
+  if(document.getElementById('newGoalForm')) return;
+  const others = CATS.filter(x=>x.id!==currentNode);
+  const div = document.createElement('div'); div.className='inlineForm'; div.id='newGoalForm';
+  div.innerHTML = `<input type="text" id="newGoalName" placeholder="اسم الهدف أو المهمة">
+    <div class="miniLbl">بيخدم كمان كاتوجري تانية؟ (اختياري)</div>
+    <div id="tagChips">${others.map(o=>`<span class="tagchip" data-id="${o.id}" style="border-color:${o.c}">${o.name}</span>`).join('')}</div>
+    <div class="fbtns"><button class="cancel" type="button">إلغاء</button><button class="ok" type="button">إضافة</button></div>`;
+  c.appendChild(div);
+  const selected = new Set();
+  div.querySelectorAll('.tagchip').forEach(chip=>{
+    chip.onclick = ()=>{
+      const id = chip.dataset.id;
+      if(selected.has(id)){ selected.delete(id); chip.classList.remove('on'); chip.style.background=''; }
+      else{ selected.add(id); chip.classList.add('on'); chip.style.background=chip.style.borderColor; }
+    };
+  });
+  const input = div.querySelector('#newGoalName'); input.focus();
+  div.querySelector('.cancel').onclick = ()=> div.remove();
+  const commit = ()=>{
+    const name = input.value.trim();
+    if(!name){ div.remove(); return; }
+    DATA.nodes[currentNode].goals.push({name, done:false, tags:[...selected]});
+    save(); renderGoals();
+  };
+  div.querySelector('.ok').onclick = commit;
+  input.onkeydown = (e)=>{ if(e.key==='Enter') commit(); };
+}
+
+function renderHistory(){
+  const n = DATA.nodes[currentNode];
+  const cat = CATS.find(c=>c.id===currentNode);
+  const el = document.getElementById('miniHistory');
+  el.innerHTML='';
+  const last14 = n.history.slice(-14);
+  last14.forEach(h=>{
+    const b = document.createElement('div');
+    b.style.flex='1'; b.style.height=(h.v||5)+'%'; b.style.background=cat.c; b.style.borderRadius='2px'; b.style.minHeight='3px';
+    el.appendChild(b);
+  });
+  if(last14.length===0) el.innerHTML='<span class="miniLbl">لسه مفيش سجل — كل ما تدخل هنا هيتسجل تقدمك</span>';
+}
+
+function openPurpose(){
+  document.getElementById('purposeText').value = DATA.purpose.text;
+  document.getElementById('alignBar').style.width = DATA.purpose.align+'%';
+  document.getElementById('alignLbl').textContent = computeAlignLabel();
+  renderMentors();
+  document.getElementById('purposeOv').classList.add('show');
+}
+document.getElementById('purposeText').oninput=(e)=>{ DATA.purpose.text=e.target.value; save(); };
+function computeAlignLabel(){
+  const linked = CATS.reduce((s,c)=>s+DATA.nodes[c.id].goals.filter(g=>g.tags&&g.tags.length).length,0);
+  DATA.purpose.align = Math.min(100, 20 + linked*10 + DATA.mentors.length*5);
+  save();
+  return linked>0 ? `${linked} هدف بيغذي أكتر من جانب في حياتك` : 'ابدأ اربط أهدافك ببعض عشان الاتساق يزيد';
+}
+function renderMentors(){
+  const c = document.getElementById('mentorsList');
+  c.innerHTML='';
+  DATA.mentors.forEach((m,i)=>{
+    const div = document.createElement('div'); div.className='person';
+    div.innerHTML = `<b>${m.name||'قدوة'}</b><div class="aiOut" style="margin-top:4px;">${m.quote}</div>`;
+    c.appendChild(div);
+  });
+}
+function addMentor(){
+  const name = document.getElementById('mentorName').value.trim();
+  const quote = document.getElementById('mentorQuote').value.trim();
+  if(!quote) return;
+  DATA.mentors.push({name, quote});
+  document.getElementById('mentorName').value=''; document.getElementById('mentorQuote').value='';
+  save(); renderMentors(); renderOrbit();
+}
+
+// ---- AI ----
+let sampleFn = null, downloadsFn = null;
+(async ()=>{ try{ sampleFn = await claude.use('sample'); }catch(e){} })();
+(async ()=>{ try{ downloadsFn = await claude.use('downloads'); }catch(e){} })();
+
+async function askAiNode(){
+  const box = document.getElementById('nodeAiOut');
+  const txt = document.getElementById('nodeAiText');
+  box.style.display='block'; txt.textContent='جاري التفكير...';
+  if(!sampleFn){ txt.textContent='الذكاء الاصطناعي مش متاح دلوقتي في هذا العرض.'; return; }
+  const n = DATA.nodes[currentNode];
+  const cat = CATS.find(c=>c.id===currentNode);
+  const prompt = `انت مساعد شخصي بيتكلم عربي مصري بسيط ودافئ. ركز بس على جانب "${cat.name}" من حياة المستخدم.
+فين هو واقف: ${n.whereAt||'لسه مكتبش'}
+فين عايز يوصل: ${n.whereTo||'لسه مكتبش'}
+نسبة تقدمه: ${n.progress}%
+أهدافه: ${n.goals.map(g=>`${g.name} (${g.done?'خلصها':'لسه'})`).join('، ')||'مفيش أهداف مسجلة'}
+حقول إضافية: ${n.fields.map(f=>`${f.name}: ${f.value}`).join('، ')||'مفيش'}
+ادّيه نصيحة عملية قصيرة (٤-٦ أسطر) تساعده يقرب من هدفه في الجانب ده بس.`;
+  try{
+    const res = await sampleFn(prompt, {onText:({text})=>{ txt.textContent=text; }});
+    txt.textContent = res.text;
+  }catch(e){ txt.textContent='حصل خطأ، حاول تاني.'; }
+}
+
+document.getElementById('aiOverviewBtn').onclick = async ()=>{
+  document.getElementById('aiOv').classList.add('show');
+  const txt = document.getElementById('aiOverviewText');
+  txt.textContent='جاري التحليل...';
+  if(!sampleFn){ txt.textContent='الذكاء الاصطناعي مش متاح دلوقتي في هذا العرض.'; return; }
+  let summary = `رؤيته (Purpose): ${DATA.purpose.text||'لسه مكتبهاش'}\n\n`;
+  CATS.forEach(c=>{
+    const n = DATA.nodes[c.id];
+    summary += `${c.name}: فين واقف=${n.whereAt||'-'} | فين عايز يوصل=${n.whereTo||'-'} | تقدم=${n.progress}% | أهداف=${n.goals.map(g=>g.name+(g.done?'(تم)':'')).join(',')||'-'}\n`;
+  });
+  const prompt = `انت مستشار حياة بيتكلم عربي مصري بسيط ودافئ ومباشر. دي بيانات نظام حياة المستخدم على شكل ستة جوانب حوالين هدف مركزي.
+${summary}
+اديله نظرة شاملة (٨-١٠ أسطر): فين هو قوي، فين محتاج اهتمام أكتر دلوقتي، وهل في ربط بين الجوانب المهملة وبعض. كن صريح ومحفز مش نظري.`;
+  try{
+    const res = await sampleFn(prompt, {onText:({text})=>{ txt.textContent=text; }});
+    txt.textContent = res.text;
+  }catch(e){ txt.textContent='حصل خطأ، حاول تاني.'; }
+};
+
+layout();
+refreshPurposePreview();
+document.getElementById('exportBtn').onclick = async ()=>{
+  if(!downloadsFn) return;
+  try{ await downloadsFn.save({filename:'hexlife-backup.json', data: JSON.stringify(DATA, null, 2)}); }catch(e){}
+};
+document.getElementById('importInput').onchange = (e)=>{
+  const f = e.target.files[0]; if(!f) return;
+  const reader = new FileReader();
+  reader.onload = ()=>{
+    try{ const parsed = JSON.parse(reader.result); DATA = parsed; save(); location.reload(); }catch(err){}
+  };
+  reader.readAsText(f);
+};
+</script>
+</body>
+</html>
